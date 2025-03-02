@@ -7,68 +7,69 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 300px;
-        }
-        h2 {
-            color: #333;
+            margin: 50px;
         }
         input {
-            width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            margin: 10px;
+            width: 80%;
+            max-width: 300px;
         }
         button {
-            background: #28a745;
+            padding: 10px 20px;
+            background-color: blue;
             color: white;
             border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background: #218838;
         }
     </style>
-    <script>
-const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-const scriptUrl = "https://script.google.com/macros/s/AKfycbzuoaUK-M-Y4YfQRmLTQ8zEN2Tcj-AepCdLJtZXWkgi0-QAkyq3N7CTq0iJMwdvPEeQxg/exec";
-
-fetch(proxyUrl + scriptUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nama: "John Doe", nim: "123456789" })
-})
-.then(response => response.json())
-.then(data => console.log("Sukses:", data))
-.catch(error => console.error("Error:", error));
-
-
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Presensi Online</h2>
-        <input type="text" id="nama" placeholder="Masukkan Nama">
-        <input type="text" id="nim" placeholder="Masukkan NIM">
-        <button onclick="kirimPresensi()">Kirim Presensi</button>
-    </div>
+    <h2>Presensi Online</h2>
+    
+    <input type="text" id="nama" placeholder="Masukkan Nama">
+    <input type="text" id="nim" placeholder="Masukkan NIM">
+    <button onclick="kirimPresensi()">Kirim Presensi</button>
+
+    <p id="status"></p>
+
+    <script>
+        function kirimPresensi() {
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbzuoaUK-M-Y4YfQRmLTQ8zEN2Tcj-AepCdLJtZXWkgi0-QAkyq3N7CTq0iJMwdvPEeQxg/exec";
+
+            const nama = document.getElementById("nama").value;
+            const nim = document.getElementById("nim").value;
+            const statusElement = document.getElementById("status");
+
+            if (nama === "" || nim === "") {
+                statusElement.innerText = "Nama dan NIM harus diisi!";
+                statusElement.style.color = "red";
+                return;
+            }
+
+            const data = { nama, nim };
+
+            fetch(scriptUrl, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Sukses:", result);
+                statusElement.innerText = "Presensi berhasil dikirim!";
+                statusElement.style.color = "green";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                statusElement.innerText = "Gagal mengirim presensi.";
+                statusElement.style.color = "red";
+            });
+        }
+    </script>
 </body>
 </html>
