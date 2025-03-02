@@ -30,11 +30,15 @@
     
     <input type="text" id="nama" placeholder="Masukkan Nama">
     <input type="text" id="nim" placeholder="Masukkan NIM">
-    <button onclick="kirimPresensi()">Kirim Presensi</button>
+    <button id="btnKirim">Kirim Presensi</button>
 
     <p id="status"></p>
 
     <script>
+        document.getElementById("btnKirim").addEventListener("click", function() {
+            kirimPresensi();
+        });
+
         function kirimPresensi() {
             const scriptUrl = "https://script.google.com/macros/s/AKfycbzuoaUK-M-Y4YfQRmLTQ8zEN2Tcj-AepCdLJtZXWkgi0-QAkyq3N7CTq0iJMwdvPEeQxg/exec";
 
@@ -48,7 +52,7 @@
                 return;
             }
 
-            const data = { nama, nim };
+            const data = { nama: nama, nim: nim };
 
             fetch(scriptUrl, {
                 method: "POST",
