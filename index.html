@@ -4,59 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Presensi Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h2>Presensi Online</h2>
-    <input type="text" id="nama" placeholder="Nama">
-    <input type="text" id="nim" placeholder="NIM">
-    <button onclick="kirimPresensi()">Kirim Presensi</button>
-    <p id="hasil"></p>
-<div id="dataPresensi"></div>
+    <div class="container">
+        <h2>Presensi Online</h2>
+
+        <!-- Tombol Login & Logout -->
+        <button id="login">Login dengan Google</button>
+        <button id="logout" class="hidden">Logout</button>
+
+        <!-- Form Presensi -->
+        <div id="presensiForm" class="hidden">
+            <input type="text" id="nama" placeholder="Nama">
+            <input type="text" id="nim" placeholder="NIM">
+            <button id="kirimPresensi">Kirim Presensi</button>
+        </div>
+
+        <!-- Data Presensi -->
+        <h3>Data Presensi</h3>
+        <div id="dataPresensi"></div>
+    </div>
 
     <script>
-        const API_URL = "https://2f94-114-10-103-222.ngrok-free.app"; // Ganti dengan URL Ngrok yang baru
+        const backendURL = "https://06b7-114-10-103-222.ngrok-free.app"; 
 
-        async function kirimPresensi() {
-            const nama = document.getElementById("nama").value;
-            const nim = document.getElementById("nim").value;
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("login").addEventListener("click", function () {
+                alert("Login Google tidak tersedia. Gunakan backend untuk autentikasi.");
+            });
 
-            if (!nama || !nim) {
-                alert("Nama dan NIM harus diisi!");
-                return;
+            document.getElementById("logout").addEventListener("click", function () {
+                alert("Logout berhasil!");
+                document.getElementById("login").classList.remove("hidden");
+                document.getElementById("logout").classList.add("hidden");
+                document.getElementById("presensiForm").classList.add("hidden");
+            });
+
+            document.getElementById("kirimPresensi").addEventListener("click", async function () {
+                const nama = document.getElementById("nama").value;
+                const nim = document.getElementById("nim").value;
+
+                if (!nama || !nim) {
+                    alert("Nama dan NIM harus diisi!");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${backendURL}/presensi`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ nama, nim })
+                    });
+
+                    const result = await response.json();
+                    alert(result.message || result.error);
+                    loadPresensi();
+                } catch (error) {
+                    alert("Gagal mengirim presensi: " + error.message);
+                }
+            });
+
+            async function loadPresensi() {
+                try {
+                    const response = await fetch(`${backendURL}/presensi`);
+                    const data = await response.json();
+                    let output = "";
+
+                    data.forEach(item => {
+                        output += `
+                            <div class="card">
+                                <strong>Nama:</strong> ${item.nama} <br>
+                                <strong>NIM:</strong> ${item.nim} <br>
+                                <strong>Tanggal:</strong> ${item.tanggal}
+                            </div>
+                        `;
+                    });
+
+                    document.getElementById("dataPresensi").innerHTML = output;
+                } catch (error) {
+                    document.getElementById("dataPresensi").innerHTML = "<p>Gagal mengambil data presensi.</p>";
+                }
             }
 
-            const data = { nama, nim };
-async function getPresensi() {
-    const response = await fetch("http://localhost:3000/presensi");
-    const data = await response.json();
-    let output = "<h3>Data Presensi</h3><ul>";
-    
-    data.forEach(item => {
-        output += `<li>${item.nama} - ${item.nim} - ${item.tanggal}</li>`;
-    });
-    
-    output += "</ul>";
-    document.getElementById("dataPresensi").innerHTML = output;
-}
-
-getPresensi();
-
-            try {
-                const response = await fetch(`${API_URL}/presensi`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                document.getElementById("hasil").innerText = result.message || "Presensi berhasil!";
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById("hasil").innerText = "Terjadi kesalahan!";
-            }
-        }
+            loadPresensi();
+        });
     </script>
 </body>
 </html>
