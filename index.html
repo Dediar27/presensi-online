@@ -47,22 +47,18 @@
         }
     </style>
     <script>
-const proxyUrl = "https://cors-anywhere.herokuapp.com/"; 
-const scriptUrl = "https://script.google.com/macros/s/AKfycbyxFo8ZHHqJXgxsL8Vr1mqQ6RnmFGtn2ikm0AwTmLntr1apmj4RwAGT_hwYoxMX5car_A/exec";
+const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+const scriptUrl = "https://script.google.com/macros/s/AKfycbzuoaUK-M-Y4YfQRmLTQ8zEN2Tcj-AepCdLJtZXWkgi0-QAkyq3N7CTq0iJMwdvPEeQxg/exec";
 
 fetch(proxyUrl + scriptUrl, {
-    method: "POST", // atau GET tergantung kebutuhan
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ 
-        nama: "John Doe", 
-        nim: "123456789" 
-    }) 
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nama: "John Doe", nim: "123456789" })
 })
 .then(response => response.json())
-.then(data => console.log(data))
+.then(data => console.log("Sukses:", data))
 .catch(error => console.error("Error:", error));
+
 
         }
     </script>
