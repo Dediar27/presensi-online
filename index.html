@@ -11,6 +11,7 @@
     <input type="text" id="nim" placeholder="NIM">
     <button onclick="kirimPresensi()">Kirim Presensi</button>
     <p id="hasil"></p>
+<div id="dataPresensi"></div>
 
     <script>
         const API_URL = "https://2f94-114-10-103-222.ngrok-free.app"; // Ganti dengan URL Ngrok yang baru
@@ -25,6 +26,20 @@
             }
 
             const data = { nama, nim };
+async function getPresensi() {
+    const response = await fetch("http://localhost:3000/presensi");
+    const data = await response.json();
+    let output = "<h3>Data Presensi</h3><ul>";
+    
+    data.forEach(item => {
+        output += `<li>${item.nama} - ${item.nim} - ${item.tanggal}</li>`;
+    });
+    
+    output += "</ul>";
+    document.getElementById("dataPresensi").innerHTML = output;
+}
+
+getPresensi();
 
             try {
                 const response = await fetch(`${API_URL}/presensi`, {
