@@ -4,6 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Presensi Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
     <script>
         async function kirimPresensi() {
             const nama = document.getElementById("nama").value;
@@ -27,11 +69,11 @@
     </script>
 </head>
 <body>
-    <h2>Presensi Online</h2>
-    <label>Nama:</label>
-    <input type="text" id="nama" placeholder="Masukkan nama"><br>
-    <label>NIM:</label>
-    <input type="text" id="nim" placeholder="Masukkan NIM"><br>
-    <button onclick="kirimPresensi()">Kirim Presensi</button>
+    <div class="container">
+        <h2>Presensi Online</h2>
+        <input type="text" id="nama" placeholder="Masukkan Nama">
+        <input type="text" id="nim" placeholder="Masukkan NIM">
+        <button onclick="kirimPresensi()">Kirim Presensi</button>
+    </div>
 </body>
 </html>
