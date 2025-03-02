@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi Online</title>
+    <script>
+        async function kirimPresensi() {
+            const nama = document.getElementById("nama").value;
+            const nim = document.getElementById("nim").value;
+            if (!nama || !nim) {
+                alert("Harap isi semua data!");
+                return;
+            }
+
+            const url = "PASTE_URL_GOOGLE_SCRIPT_DI_SINI"; // Ganti dengan URL Google Apps Script
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nama, nim })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+    </script>
+</head>
+<body>
+    <h2>Presensi Online</h2>
+    <label>Nama:</label>
+    <input type="text" id="nama" placeholder="Masukkan nama"><br>
+    <label>NIM:</label>
+    <input type="text" id="nim" placeholder="Masukkan NIM"><br>
+    <button onclick="kirimPresensi()">Kirim Presensi</button>
+</body>
+</html>
