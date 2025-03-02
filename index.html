@@ -47,24 +47,23 @@
         }
     </style>
     <script>
-        async function kirimPresensi() {
-            const nama = document.getElementById("nama").value;
-            const nim = document.getElementById("nim").value;
-            if (!nama || !nim) {
-                alert("Harap isi semua data!");
-                return;
-            }
+const proxyUrl = "https://cors-anywhere.herokuapp.com/"; 
+const scriptUrl = "https://script.google.com/macros/s/AKfycbyK6jtcGyGwfl_cHwBGh69_NYWT_Jc1PAbQSa2KXM5r-QOF6NAJ2tGr-FfuGXsUQl3B3g/exec";
 
-            const url = "https://script.google.com/a/macros/teknokrat.ac.id/s/AKfycbzuoaUK-M-Y4YfQRmLTQ8zEN2Tcj-AepCdLJtZXWkgi0-QAkyq3N7CTq0iJMwdvPEeQxg/exec"; // Ganti dengan URL Google Apps Script
+fetch(proxyUrl + scriptUrl, {
+    method: "POST", // atau GET tergantung kebutuhan
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ 
+        nama: "John Doe", 
+        nim: "123456789" 
+    }) 
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error("Error:", error));
 
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nama, nim })
-            });
-
-            const result = await response.json();
-            alert(result.message);
         }
     </script>
 </head>
